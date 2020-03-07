@@ -1,0 +1,29 @@
+<style>
+    .jumbotron {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+        background-color: #fff;
+    }
+
+    .uploadForm{
+        margin-top: 3rem;
+        padding-left: 30%;
+        padding-right: 30%;
+    }
+</style>
+
+<section class="jumbotron text-center">
+    <div class="container">
+      <h1>Upload Image</h1>
+      <p class="lead text-muted">Here you can upload your images!</p>
+    </div>
+
+    <div class="uploadForm">
+        <form action="/upload_cloud" method="POST" enctype="multipart/form-data">
+                <label for="formGroupExampleInput">Description</label>
+                <input type="text" class="form-control" name="description" placeholder="Put here a description of your image">
+                <input type="file" name= "image">
+                <button href="#" class="btn btn-primary my-2">Upload</button>
+        </form>
+    </div>
+  </section>
