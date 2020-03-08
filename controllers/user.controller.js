@@ -9,8 +9,8 @@ class UserController{
         return await user.getUsers();
     }
 
-    findbyEmail(){
-        return user.findByEmail();
+    findbyEmail(email){
+        return user.findByEmail(email);
     }
 
 }

@@ -15,7 +15,7 @@ class User extends DB {
         let myUsers = await super.getJson('users');
 
         await myUsers.find(u => {
-            if (u.email === email && u.password === password)
+            if (u.email == email && u.password == password)
                 user = u;
         })
         if (user) {
@@ -30,17 +30,19 @@ class User extends DB {
         return await super.getJson('users');
     }
 
-/*     async findByEmail(email, cb){
+     async findByEmail(email){
+        let user = null;
         let myUsers= await super.getJson('users');
-        process.nextTick(function(){
-            for(u in myUsers){
-                if(u.email === email)
-                    return cb(null, u);
-            }
-            return cb(null,null)
+        myUsers.find( u => {
+            if(u.email == email)
+                user =u;
         })
-    } */
-    
+        if (user) {
+            this._model = user;
+            return this._model;
+        } else return user;
+    }
+
 }
 
 let user = new User();

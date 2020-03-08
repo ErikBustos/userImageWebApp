@@ -43,9 +43,8 @@ router.post('/upload_cloud', uploadImage.single('image'), async (req, res) =>{
         description: req.body.description,
         uploadDate: new Date(new Date().getTime()).toDateString(),
         fileName: req.file.originalname,
-        userId: '5e63e43783199b32b02fa8f0' //tengo que cambiar esto
+        userId: req.user.uid
     }
-    //console.log(imageInfo);
     await photoController.uploadPhoto(imageInfo)
     res.redirect('/images');
 })

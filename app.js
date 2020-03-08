@@ -8,7 +8,7 @@ const path = require('path');
 
 const loginRouter = require('./routes/login');
 const uploadRouter = require('./routes/upload');
-const imagesRouter = require('./routes/images')
+const imagesRouter = require('./routes/images');
 
 const userController= require('./controllers/user.controller');
 const photoController= require('./controllers/photo.controller');
@@ -16,6 +16,8 @@ const photoController= require('./controllers/photo.controller');
 require('./config/passport-setup');
 
 let app = express();
+
+app.use(bodyParser.urlencoded({extended: true}))
 
 app.engine('hbs', hbs({
     extname: 'hbs',
@@ -45,21 +47,30 @@ app.get('/hola', async (req, res) =>{
   res.json(await userController.read(email,password));
 })
 
-app.get('/userphotos',async (req,res) =>{
-  let id = '5e63e43783199b32b02fa8f0';
-  res.json(await photoController.photosOfUser(id));
+app.post('/login', 
+  passport.authenticate('local', {successRedirect: '/upload',
+                                  failureRedirect: '/login',
+                                  failureFlash:false}),
+    (req,res)=>{
+      console.log('hello')
+      let logoutNav = document.querySelector("#logoutNav");
+      logoutNav.innerHTML = 'true';
+  });
+
+app.get('/logout', (req,res)=>{
+  req.logOut();
+  res.redirect('/login');
 })
 
-app.post('/testAuth', 
-  passport.authenticate('local', {successRedirect: '/upload',
-                                  failureRedirect: '/faill'}))
+app.get('/hello', (req,res)=>{
+  res.json(req.user);
+})
 
 app.get('/', (req, res) => {
-    res.render('home',
-    {
-        title: 'title'
-    }
-    )
+    if(req.user)
+      res.redirect('/images');
+    else
+      res.redirect('/login');
   });
   
   app.listen(3000,()  =>{

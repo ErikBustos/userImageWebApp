@@ -1,7 +1,8 @@
 const fetch = require('node-fetch');
 
-const PORT= 3001;
-const URL = `http://localhost:${PORT}/`
+require('dotenv').config();
+
+const URL = `http://localhost:${process.env.PORT}/`
 
 class DB{
         //return a JSON response of the URL
