@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 
 require('dotenv').config();
 
-const URL = `http://localhost:${process.env.PORT}/`
+const URL = `http://localhost:${process.env.PORT_LOOPBACK}/`
 
 class DB{
         //return a JSON response of the URL

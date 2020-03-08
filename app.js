@@ -3,19 +3,22 @@ const hbs = require('express-handlebars');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
-
 const path = require('path');
 
-const loginRouter = require('./routes/login');
+const app = express();
+
+const http = require('http').createServer(app);  
+const io = require('socket.io')(http);
+
+const AuthRouter = require('./routes/auth');
 const uploadRouter = require('./routes/upload');
 const imagesRouter = require('./routes/images');
 
-const userController= require('./controllers/user.controller');
-const photoController= require('./controllers/photo.controller');
+const photosController = require('./controllers/photo.controller');
+const usersController = require('./controllers/user.controller');
 
 require('./config/passport-setup');
-
-let app = express();
+require('dotenv').config();
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -31,49 +34,41 @@ app.set('view engine', 'hbs');
 
 app.use(cookieSession({
   maxAge: 24 * 60 *60 * 1000,
-  keys:['clave']
+  keys:[process.env.COOKIE_KEY]
  }))
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(loginRouter);
+app.use(AuthRouter);
 app.use(uploadRouter);
 app.use(imagesRouter);
-
-app.get('/hola', async (req, res) =>{
-  let email = 'erik@gmail.com';
-  let password = 'erik';
-  res.json(await userController.read(email,password));
-})
-
-app.post('/login', 
-  passport.authenticate('local', {successRedirect: '/upload',
-                                  failureRedirect: '/login',
-                                  failureFlash:false}),
-    (req,res)=>{
-      console.log('hello')
-      let logoutNav = document.querySelector("#logoutNav");
-      logoutNav.innerHTML = 'true';
-  });
-
-app.get('/logout', (req,res)=>{
-  req.logOut();
-  res.redirect('/login');
-})
 
 app.get('/hello', (req,res)=>{
   res.json(req.user);
 })
 
-app.get('/', (req, res) => {
-    if(req.user)
-      res.redirect('/images');
-    else
-      res.redirect('/login');
+app.get('/',  async (req, res) => {
+  res.render('home',{
+    numberPhotos: await photosController.numberofPhotos(),
+    numberUsers: await usersController.numberofUsers()
   });
+    // if(req.user)
+    //   res.redirect('/');
+    // else
+    //   res.redirect('/login');
+  });
+
+io.on('connection', (socket) =>{
+
+  socket.on('upload',async (msg) => {
+    io.emit('render', 'need to render');
+    })
+})
+
+io.on('upload',(msg) => console.log(msg))
   
-  app.listen(3000,()  =>{
-    console.log('Example app listening on port 3000!');
+  http.listen(process.env.APP_PORT ,()  =>{
+    console.log(`Example app listening on port ${process.env.APP_PORT}!`);
   });
   

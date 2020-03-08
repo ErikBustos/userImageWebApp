@@ -43,6 +43,11 @@ class User extends DB {
         } else return user;
     }
 
+    async getNumberofUsers(){
+        let myUsers= await super.getJson('users');
+        return myUsers.length;
+    }
+
 }
 
 let user = new User();

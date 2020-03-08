@@ -13,6 +13,10 @@ class UserController{
         return user.findByEmail(email);
     }
 
+    async numberofUsers(){
+        return await user.getNumberofUsers();
+    }
+
 }
 
 const userController = new UserController();

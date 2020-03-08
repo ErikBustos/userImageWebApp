@@ -30,6 +30,13 @@ class Photo extends DB{
         return await super.getJson('photos')
     }
 
+    async getNumberofPhotos(){
+        let n=0;
+        let myPhotos = await super.getJson('photos');
+        n= myPhotos.length;
+        return n;
+    }
+
 }
 
 

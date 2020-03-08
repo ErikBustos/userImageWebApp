@@ -8,6 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script> 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href= "../../src/App.css"
 </head>
@@ -23,7 +24,7 @@
             <a class="nav-item nav-link active" href="/">Home<span class="sr-only">(current)</span></a>
             <a class="nav-item nav-link" href="/upload">Upload</a>
             <a class="nav-item nav-link" href="/images">My images</a>
-            <a class="nav-item nav-link" href="/login">Login</a>
+            <a class="nav-item nav-link" href="/login" id='loginNav'>Login</a>
             <a class="nav-item nav-link" href="/logout" id='logoutNav'>Logout</a>
             </div>
         </div>
@@ -32,4 +33,30 @@
     <h1>My Image express App</h1>
     {{{body}}}
 </body>
+<script>
+    let socket = io();
+
+    socket.on('render', (msg) => {
+        let numPhotos= document.querySelector('#numberPhotos')
+        numPhotos.innerHTML= parseInt(numPhotos.innerHTML) +1;
+        console.log(msg)
+        })
+
+
+    function uploadImage(){
+        socket.emit('upload', "uploaded");
+    }
+
+    function showLogout(){
+        let logoutButton = document.querySelector('#logoutNav');
+        logoutButton.hidden= false;
+    }
+
+    function hidelogin(){
+        let loginButton = document.querySelector('#loginNav');
+        loginButton.hidden= true;
+    }
+
+
+</script>
 </html>

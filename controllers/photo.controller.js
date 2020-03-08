@@ -13,6 +13,10 @@ class PhotoController{
         return await photo.postPhoto(photoJson);
     }
 
+    async numberofPhotos(){
+        return await photo.getNumberofPhotos();
+    }
+
 }
 
 const photoController = new PhotoController();
